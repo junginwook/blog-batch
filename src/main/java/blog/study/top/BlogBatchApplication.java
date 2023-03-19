@@ -1,4 +1,4 @@
-package blog.study.toph;
+package blog.study.top;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
