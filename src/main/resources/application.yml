@@ -10,4 +10,11 @@ spring:
   batch: #TODO
     jdbc:
       initialize-schema: always
-    job.names: ${job.name:NONE}
+    job.name: ${job.name:NONE}
+
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
