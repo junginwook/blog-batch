@@ -5,10 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -28,12 +30,12 @@ public class StepNextConditionalJobConfiguration {
 	@Bean
 	public Job stepNextConditionalJob() {
 		return new JobBuilder("stepNextConditionalJob", jobRepository)
-				.start(conditionalJobStep1())
+				.start(conditionalJobStep1(null))
 					.on("FAILED")
 					.to(conditionalJobStep3())
 					.on("*")
 					.end()
-				.from(conditionalJobStep1())
+				.from(conditionalJobStep1(null))
 					.on("*")
 					.to(conditionalJobStep2())
 					.next(conditionalJobStep3())
@@ -44,9 +46,11 @@ public class StepNextConditionalJobConfiguration {
 	}
 
 	@Bean
-	public Step conditionalJobStep1() {
+	@JobScope
+	public Step conditionalJobStep1(@Value("#{jobParameters[requestDate]}") String requestDate) {
 		return new StepBuilder("step1", jobRepository)
 				.tasklet((contribution, chunkContext) -> {
+					log.info(">>>>> requestDate is {}", requestDate);
 					log.info(">>>>> This is stepNextConditionalJob Step1");
 					contribution.setExitStatus(ExitStatus.FAILED);
 					return RepeatStatus.FINISHED;
