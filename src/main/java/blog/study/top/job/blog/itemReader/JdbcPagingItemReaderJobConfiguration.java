@@ -1,6 +1,6 @@
 package blog.study.top.job.blog.itemReader;
 
-import blog.study.top.entity.Pay;
+import blog.study.top.repository.pay.PayEntity;
 import java.util.HashMap;
 import java.util.Map;
 import javax.sql.DataSource;
@@ -46,7 +46,7 @@ public class JdbcPagingItemReaderJobConfiguration {
 	@Bean
 	public Step jdbcPagingItemReaderStep() throws Exception {
 		return new StepBuilder("jdbcPagingItemReaderStep", jobRepository)
-				.<Pay, Pay>chunk(CHUNK_SIZE, transactionManager)
+				.<PayEntity, PayEntity>chunk(CHUNK_SIZE, transactionManager)
 				.reader(jdbcPagingItemReader())
 				.writer(jdbcPagingItemWriter())
 				.build();
@@ -54,25 +54,25 @@ public class JdbcPagingItemReaderJobConfiguration {
 
 	@Bean
 	@JobScope
-	public JdbcPagingItemReader<Pay> jdbcPagingItemReader() throws Exception {
+	public JdbcPagingItemReader<PayEntity> jdbcPagingItemReader() throws Exception {
 		Map<String, Object> parameterValues = new HashMap<>();
 		parameterValues.put("amount", 2000);
 
-		return new JdbcPagingItemReaderBuilder<Pay>()
+		return new JdbcPagingItemReaderBuilder<PayEntity>()
 				.pageSize(CHUNK_SIZE)
 				.fetchSize(CHUNK_SIZE)
 				.dataSource(dataSource)
-				.rowMapper(new BeanPropertyRowMapper<>(Pay.class))
+				.rowMapper(new BeanPropertyRowMapper<>(PayEntity.class))
 				.queryProvider(createQueryProvider())
 				.parameterValues(parameterValues)
 				.name("jdbcPagingItemReader")
 				.build();
 	}
 
-	private ItemWriter<Pay> jdbcPagingItemWriter() {
+	private ItemWriter<PayEntity> jdbcPagingItemWriter() {
 		return lists -> {
-			for (Pay pay : lists) {
-				log.info("Cursor Pay={}", pay);
+			for (PayEntity payEntity : lists) {
+				log.info("Cursor Pay={}", payEntity);
 			}
 		};
 	}

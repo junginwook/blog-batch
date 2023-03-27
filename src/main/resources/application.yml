@@ -11,6 +11,7 @@ spring:
     jdbc:
       initialize-schema: always
     job.name: ${job.name:NONE}
+    chunk-size: 1000
 
 
   jpa:
