@@ -1,6 +1,6 @@
 package blog.study.top.job.blog.itemReader;
 
-import blog.study.top.entity.Pay;
+import blog.study.top.repository.pay.PayEntity;
 import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,28 +41,28 @@ public class JdbcCursorItemReaderJobConfiguration {
 	@Bean
 	public Step jdbcCursorItemReaderStep() {
 		return new StepBuilder("jdbcCursorItemReaderStep", jobRepository)
-				.<Pay, Pay>chunk(CHUNK_SIZE, transactionManager)
+				.<PayEntity, PayEntity>chunk(CHUNK_SIZE, transactionManager)
 				.reader(jdbcCursorItemReader())
 				.writer(jdbCursorItemWriter())
 				.build();
 	}
 
 	@Bean
-	public JdbcCursorItemReader<Pay> jdbcCursorItemReader() {
-		return new JdbcCursorItemReaderBuilder<Pay>()
+	public JdbcCursorItemReader<PayEntity> jdbcCursorItemReader() {
+		return new JdbcCursorItemReaderBuilder<PayEntity>()
 				.fetchSize(CHUNK_SIZE)
 				.dataSource(dataSource)
-				.rowMapper(new BeanPropertyRowMapper<>(Pay.class))
+				.rowMapper(new BeanPropertyRowMapper<>(PayEntity.class))
 				.sql("SELECT id, amount, tx_name, tx_date_time FROM pay")
 				.name("jdbcCursorItemReader")
 				.build();
 	}
 
 	@Bean
-	public ItemWriter<Pay> jdbCursorItemWriter() {
+	public ItemWriter<PayEntity> jdbCursorItemWriter() {
 		return lists -> {
-			for (Pay pay : lists) {
-				log.info("Current Pay={}", pay);
+			for (PayEntity payEntity : lists) {
+				log.info("Current Pay={}", payEntity);
 			}
 		};
 	}

@@ -1,6 +1,6 @@
 package blog.study.top.job.blog.itemWriter;
 
-import blog.study.top.entity.Pay;
+import blog.study.top.repository.pay.PayEntity;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ public class JpaItemWriterJobConfiguration {
 	@Bean
 	public Step jpaItemWriterStep() {
 		return new StepBuilder("jpaItemWriterStep", jobRepository)
-				.<Pay, Pay>chunk(CHUNK_SIZE, transactionManager)
+				.<PayEntity, PayEntity>chunk(CHUNK_SIZE, transactionManager)
 				.reader(jpaItemWriterReader())
 				.processor(jpaItemProcessor())
 				.writer(jpaItemWriter())
@@ -45,24 +45,25 @@ public class JpaItemWriterJobConfiguration {
 	}
 
 	@Bean
-	public JpaPagingItemReader<Pay> jpaItemWriterReader() {
-		return new JpaPagingItemReaderBuilder<Pay>()
+	public JpaPagingItemReader<PayEntity> jpaItemWriterReader() {
+		return new JpaPagingItemReaderBuilder<PayEntity>()
 				.name("jpaItemWriterReader")
 				.entityManagerFactory(entityManagerFactory)
 				.pageSize(CHUNK_SIZE)
-				.queryString("SELECT p FROM Pay p")
+				.queryString("SELECT p FROM pay p")
 				.build();
 	}
 
 	@Bean
-	public ItemProcessor<Pay, Pay> jpaItemProcessor() {
+	public ItemProcessor<PayEntity, PayEntity> jpaItemProcessor() {
 		return pay -> pay;
 	}
 
 	@Bean
-	public JpaItemWriter<Pay> jpaItemWriter() {
-		JpaItemWriter<Pay> jpaItemWriter = new JpaItemWriter<>();
+	public JpaItemWriter<PayEntity> jpaItemWriter() {
+		JpaItemWriter<PayEntity> jpaItemWriter = new JpaItemWriter<>();
 		jpaItemWriter.setEntityManagerFactory(entityManagerFactory);
+		jpaItemWriter.setUsePersist(true);
 		return jpaItemWriter;
 	}
 }

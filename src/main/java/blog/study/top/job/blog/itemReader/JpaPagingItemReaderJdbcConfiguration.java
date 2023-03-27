@@ -1,6 +1,6 @@
 package blog.study.top.job.blog.itemReader;
 
-import blog.study.top.entity.Pay;
+import blog.study.top.repository.pay.PayEntity;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,15 +36,15 @@ public class JpaPagingItemReaderJdbcConfiguration {
 	@Bean
 	public Step jpaPagingItemReaderStep() {
 		return new StepBuilder("jpaPagingItemReaderStep", jobRepository)
-				.<Pay, Pay>chunk(CHUNK_SIZE, transactionManager)
+				.<PayEntity, PayEntity>chunk(CHUNK_SIZE, transactionManager)
 				.reader(jpaPagingItemReader())
 				.writer(jpaPagingItemWriter())
 				.build();
 	}
 
 	@Bean
-	public JpaPagingItemReader<Pay> jpaPagingItemReader() {
-		return new JpaPagingItemReaderBuilder<Pay>()
+	public JpaPagingItemReader<PayEntity> jpaPagingItemReader() {
+		return new JpaPagingItemReaderBuilder<PayEntity>()
 				.name("jpaPagingItemReader")
 				.entityManagerFactory(entityManagerFactory)
 				.pageSize(CHUNK_SIZE)
@@ -53,10 +53,10 @@ public class JpaPagingItemReaderJdbcConfiguration {
 	}
 
 	@Bean
-	public ItemWriter<Pay> jpaPagingItemWriter() {
+	public ItemWriter<PayEntity> jpaPagingItemWriter() {
 		return list -> {
-			for (Pay pay: list) {
-				log.info("pay name={}", pay.getTxName());
+			for (PayEntity payEntity : list) {
+				log.info("pay name={}", payEntity.getTxName());
 			}
 		};
 	}
