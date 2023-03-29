@@ -31,7 +31,7 @@ public class JdbcPagingItemReaderJobConfiguration {
 	private final JobRepository jobRepository;
 	private final PlatformTransactionManager transactionManager;
 	private final DataSource dataSource;
-	private int CHUNK_SIZE = 10;
+	private int CHUNK_SIZE = 3;
 
 	/**
 	 * pagingItemReader 는 page size 단위로 커넥션이 맺고 끊어진다.
@@ -56,7 +56,7 @@ public class JdbcPagingItemReaderJobConfiguration {
 	@JobScope
 	public JdbcPagingItemReader<PayEntity> jdbcPagingItemReader() throws Exception {
 		Map<String, Object> parameterValues = new HashMap<>();
-		parameterValues.put("amount", 2000);
+		parameterValues.put("amount", 1);
 
 		return new JdbcPagingItemReaderBuilder<PayEntity>()
 				.pageSize(CHUNK_SIZE)
