@@ -2,6 +2,8 @@ package blog.study.top.job.blog.itemReader;
 
 import blog.study.top.repository.pay.PayEntity;
 import jakarta.persistence.EntityManagerFactory;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -24,7 +26,7 @@ public class JpaPagingItemReaderJdbcConfiguration {
 	private final JobRepository jobRepository;
 	private final PlatformTransactionManager transactionManager;
 	private final EntityManagerFactory entityManagerFactory;
-	private int CHUNK_SIZE = 10;
+	private int CHUNK_SIZE = 3;
 
 	@Bean
 	public Job jpaPagingItemReaderJob() {
@@ -44,11 +46,15 @@ public class JpaPagingItemReaderJdbcConfiguration {
 
 	@Bean
 	public JpaPagingItemReader<PayEntity> jpaPagingItemReader() {
+		Map<String, Object> params = new HashMap<>();
+		params.put("txName", "txName2");
+
 		return new JpaPagingItemReaderBuilder<PayEntity>()
 				.name("jpaPagingItemReader")
 				.entityManagerFactory(entityManagerFactory)
 				.pageSize(CHUNK_SIZE)
-				.queryString("SELECT p FROM Pay p WHERE amount >= 2000")
+				.queryString("SELECT p FROM pay p WHERE p.txName = :txName AND amount >= 1")
+				.parameterValues(params)
 				.build();
 	}
 
