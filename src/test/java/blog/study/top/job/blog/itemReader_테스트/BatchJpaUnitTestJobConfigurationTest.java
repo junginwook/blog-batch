@@ -16,11 +16,9 @@ import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.test.MetaDataInstanceFactory;
 import org.springframework.batch.test.context.SpringBatchTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Import;
 
 @SpringBatchTest
-@EnableAutoConfiguration
 @Import({
 		TestBatchConfig.class,
 		BatchJpaUnitTestJobConfiguration.class
