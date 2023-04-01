@@ -14,10 +14,10 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.batch.test.context.SpringBatchTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBatchTest
-@Import({TestBatchConfig.class,
+@SpringBootTest(classes = {TestBatchConfig.class,
 		ItemListJobConfiguration.class
 })
 class ItemListJobConfigurationTest {

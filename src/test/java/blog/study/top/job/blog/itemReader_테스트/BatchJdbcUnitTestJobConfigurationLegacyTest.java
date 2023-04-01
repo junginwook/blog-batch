@@ -35,7 +35,7 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 @SpringBatchTest
 @EnableAutoConfiguration
-@Import({
+@SpringBootTest(classes = {
 		TestBatchConfig.class,
 		BatchJdbcTestConfiguration.class,
 })
