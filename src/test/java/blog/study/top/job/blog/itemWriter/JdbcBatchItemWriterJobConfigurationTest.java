@@ -16,7 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
 @SpringBatchTest
-@Import({
+@SpringBootTest(classes = {
 		JdbcBatchItemWriterJobConfiguration.class,
 		TestBatchConfig.class}
 )

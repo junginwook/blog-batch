@@ -1,5 +1,7 @@
 package blog.study.top.job.blog.itemReader;
 
+import static blog.study.top.job.blog.itemReader.JdbcCursorItemReaderJobConfiguration.JOB_NAME;
+
 import blog.study.top.repository.pay.PayEntity;
 import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -20,8 +23,10 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
+@ConditionalOnProperty(name = "job.name", havingValue = JOB_NAME)
 public class JdbcCursorItemReaderJobConfiguration {
 
+	public static final String JOB_NAME = "jdbcCursorItemReaderJob";
 	private final JobRepository jobRepository;
 	private final PlatformTransactionManager transactionManager;
 	private final DataSource dataSource;

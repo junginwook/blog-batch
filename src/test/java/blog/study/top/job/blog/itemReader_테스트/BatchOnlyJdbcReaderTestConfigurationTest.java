@@ -15,6 +15,7 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -26,36 +27,23 @@ import org.springframework.transaction.PlatformTransactionManager;
 /**
  * H2 내장 데이터베이스 활용하여 테스트
  */
-@Import({TestBatchConfig.class})
+@SpringBootTest(classes = TestBatchConfig.class)
 class BatchOnlyJdbcReaderTestConfigurationTest {
 
-	private DataSource dataSource;
+	@Autowired private DataSource dataSource;
+	@Autowired private JobRepository jobRepository;
+	@Autowired private PlatformTransactionManager transactionManager;
 	private JdbcTemplate jdbcTemplate;
-	private ConfigurableApplicationContext context;
 	private String txName;
 	private BatchJdbcTestConfiguration job;
 
-	@Autowired
-	private JobRepository jobRepository;
-
-	@Autowired
-	private PlatformTransactionManager transactionManager;
 
 	@BeforeEach
 	public void setUp() {
-		this.context = new AnnotationConfigApplicationContext(BatchPayDatabaseConfig.class);
-		this.dataSource = (DataSource) context.getBean("dataSource");
 		this.jdbcTemplate = new JdbcTemplate(this.dataSource);
 		this.txName = "name";
 		this.job = new BatchJdbcTestConfiguration(jobRepository, dataSource, transactionManager);
 		this.job.setChunkSize(10);
-	}
-
-	@AfterEach
-	public void tearDown() {
-		if (this.context != null) {
-			this.context.close();
-		}
 	}
 
 	@Test

@@ -25,7 +25,7 @@ public class PurchaseOrder {
 	@Column
 	private String memo;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "purchaseOrder", cascade = CascadeType.ALL)
 	private List<Product> productList;
 
 	@Builder
