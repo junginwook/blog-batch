@@ -38,7 +38,6 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 @Import({
 		TestBatchConfig.class,
 		BatchJdbcTestConfiguration.class,
-		BatchPayDatabaseConfig.class
 })
 class BatchJdbcUnitTestJobConfigurationLegacyTest {
 
