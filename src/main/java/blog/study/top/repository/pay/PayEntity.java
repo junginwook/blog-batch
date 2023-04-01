@@ -20,6 +20,8 @@ public class PayEntity {
 	private String txName;
 	private LocalDateTime txDateTime;
 
+	private boolean successStatus;
+
 	public PayEntity(Long amount, String txName, LocalDateTime txDateTime) {
 		this.amount = amount;
 		this.txName = txName;
@@ -33,7 +35,16 @@ public class PayEntity {
 		this.txDateTime = txDateTime;
 	}
 
+	public PayEntity(Long amount, boolean successStatus) {
+		this.amount = amount;
+		this.successStatus = successStatus;
+	}
+
 	public void changeName(String txName) {
 		this.txName = txName;
+	}
+
+	public void success() {
+		this.successStatus = true;
 	}
 }
