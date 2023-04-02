@@ -19,7 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 		PayPagingPageJobConfiguration.class,
 		TestBatchConfig.class
 })
-class PayPagingFailJobConfigurationTest {
+class PayPagingPageJobConfigurationTest {
 
 	@Autowired
 	private JobLauncherTestUtils jobLauncherTestUtils;

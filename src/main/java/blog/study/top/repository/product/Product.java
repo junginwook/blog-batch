@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,16 +25,43 @@ public class Product {
 	@Column
 	private String name;
 
+	@Column
+	private long price;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "purchase_order_id")
 	private PurchaseOrder purchaseOrder;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "product_id")
+	private Store store;
+
 	@Column
 	private long amount;
 
+	@Column
+	private long categoryNo;
+
+	@Column
+	private LocalDate createDate;
+
 	@Builder
-	public Product(String name, long amount) {
+	public Product(String name, long price, LocalDate createDate) {
 		this.name = name;
-		this.amount = amount;
+		this.price = price;
+		this.createDate = createDate;
+	}
+
+	public Product(String name, long price, long categoryNo, LocalDate createDate) {
+		this.name = name;
+		this.price = price;
+		this.categoryNo = categoryNo;
+		this.createDate = createDate;
+	}
+
+	@Builder
+	public Product(String name, long price) {
+		this.name = name;
+		this.price = price;
 	}
 }

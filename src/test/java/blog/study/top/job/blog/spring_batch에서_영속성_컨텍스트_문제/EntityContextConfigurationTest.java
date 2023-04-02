@@ -38,8 +38,8 @@ class EntityContextConfigurationTest {
 							.memo("도착하면 역락주세요")
 							.productList(
 									Arrays.asList(
-											Product.builder().name("마우스").amount(10000L).build(),
-											Product.builder().name("키보드").amount(30000L).build()
+											Product.builder().name("마우스").price(10000L).build(),
+											Product.builder().name("키보드").price(30000L).build()
 									)
 							)
 							.build()

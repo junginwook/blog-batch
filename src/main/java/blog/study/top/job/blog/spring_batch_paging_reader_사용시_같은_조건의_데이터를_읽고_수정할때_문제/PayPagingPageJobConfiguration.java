@@ -12,9 +12,8 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.database.JpaItemWriter;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
-import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -30,20 +29,20 @@ public class PayPagingPageJobConfiguration {
 	private final static int chunkSize = 10;
 
 	@Bean
-	public Job job230402() {
-		return new JobBuilder("job230402", jobRepository)
-				.start(step230402())
+	public Job job230402_2() {
+		return new JobBuilder("job230402_2", jobRepository)
+				.start(step230402_2())
 				.build();
 	}
 
 	@Bean
 	@JobScope
-	public Step step230402() {
-		return new StepBuilder("step230402", jobRepository)
+	public Step step230402_2() {
+		return new StepBuilder("step230402_2", jobRepository)
 				.<PayEntity, PayEntity>chunk(chunkSize, transactionManager)
-				.reader(reader230402())
-				.processor(processor230402())
-				.writer(writer230402())
+				.reader(reader230402_2())
+				.processor(processor230402_2())
+				.writer(writer230402_2())
 				.build();
 	}
 
@@ -54,7 +53,7 @@ public class PayPagingPageJobConfiguration {
 	 */
 	@Bean
 	@StepScope
-	public JpaPagingItemReader<PayEntity> reader230402() {
+	public JpaPagingItemReader<PayEntity> reader230402_2() {
 
 		JpaPagingItemReader<PayEntity> reader = new JpaPagingItemReader<>() {
 			@Override
@@ -63,7 +62,7 @@ public class PayPagingPageJobConfiguration {
 			}
 		};
 
-		reader.setName("reader230402");
+		reader.setName("reader230402_2");
 		reader.setQueryString("SELECT p FROM pay p WHERE p.successStatus = false");
 		reader.setPageSize(chunkSize);
 		reader.setEntityManagerFactory(entityManagerFactory);
@@ -73,7 +72,7 @@ public class PayPagingPageJobConfiguration {
 
 	@Bean
 	@StepScope
-	public ItemProcessor<PayEntity, PayEntity> processor230402() {
+	public ItemProcessor<PayEntity, PayEntity> processor230402_2() {
 		return item -> {
 			item.success();
 			return item;
@@ -82,9 +81,11 @@ public class PayPagingPageJobConfiguration {
 
 	@Bean
 	@StepScope
-	public JpaItemWriter<PayEntity> writer230402() {
-		return new JpaItemWriterBuilder<PayEntity>()
-				.entityManagerFactory(entityManagerFactory)
-				.build();
+	public ItemWriter<PayEntity> writer230402_2() {
+		return chunk -> {
+			for (PayEntity item : chunk) {
+				System.out.println("item: " + item.getId());
+			}
+		};
 	}
 }
