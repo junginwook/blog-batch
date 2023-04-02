@@ -37,7 +37,6 @@ class BatchOnlyJdbcReaderTestConfigurationTest {
 	private String txName;
 	private BatchJdbcTestConfiguration job;
 
-
 	@BeforeEach
 	public void setUp() {
 		this.jdbcTemplate = new JdbcTemplate(this.dataSource);
