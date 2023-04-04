@@ -1,11 +1,19 @@
 package blog.study.top.job.blog.spring_batch와_QuerydslItemReader;
 
 
+import blog.study.top.job.blog.spring_batch와_QuerydslItemReader.expression.OrderExpression;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
@@ -19,9 +27,11 @@ public class QuerydslPagingAdvancedItemReader<T> extends AbstractPagingItemReade
 	private EntityManagerFactory entityManagerFactory;
 	private EntityManager entityManager;
 	private final Map<String, Object> jpaPropertyMap = new HashMap<>();
-	private Map<String, Object> parameterValues;
 	private JPAQuery<T> firstQuery;
+	private JPAQuery<T> remainingQuery;
+
 	private boolean transacted = true;
+	private QuerydslPagingAdvancedItemReaderOption option;
 
 	public QuerydslPagingAdvancedItemReader() {
 		setName(ClassUtils.getShortName(QuerydslPagingAdvancedItemReader.class));
@@ -32,12 +42,10 @@ public class QuerydslPagingAdvancedItemReader<T> extends AbstractPagingItemReade
 		super.afterPropertiesSet();
 		JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
 		firstQuery = queryFunction.apply(queryFactory)
-				.limit(getPageSize());
+				.limit(getPageSize()).orderBy(option.orderExpression());
+		remainingQuery = queryFunction.apply(queryFactory)
+				.limit(getPageSize()).orderBy(option.orderExpression());
 	}
-
-//	private OrderSpecifier<Integer> orderExpression() {
-//		return expression.order(field);
-//	}
 
 	@Override
 	protected void doOpen() throws Exception {
@@ -51,6 +59,16 @@ public class QuerydslPagingAdvancedItemReader<T> extends AbstractPagingItemReade
 
 	@Override
 	protected void doReadPage() {
+		EntityTransaction tx = null;
+
+		if (transacted) {
+			tx = entityManager.getTransaction();
+			tx.begin();
+
+			entityManager.flush();
+			entityManager.clear();
+		} // end if
+
 		if(results == null) {
 			results = new CopyOnWriteArrayList<>();
 		}
@@ -58,8 +76,20 @@ public class QuerydslPagingAdvancedItemReader<T> extends AbstractPagingItemReade
 			results.clear();
 		}
 
+		List<T> items;
+
+		if (getPage() == 0) {
+			items = firstQuery.fetch();
+		}
+		else {
+			items = remainingQuery.where(option.whereExpression()).fetch();
+		}
+
+		option.resetCurrentId(items.get(items.size() - 1));
+		results.addAll(items);
 
 
+		tx.commit();
 	}
 
 	@Override
@@ -76,8 +106,8 @@ public class QuerydslPagingAdvancedItemReader<T> extends AbstractPagingItemReade
 		this.entityManagerFactory = entityManagerFactory;
 	}
 
-	public void setParameterValues(Map<String, Object> parameterValues) {
-		this.parameterValues = parameterValues;
+	public void setOption(QuerydslPagingAdvancedItemReaderOption option) {
+		this.option = option;
 	}
 
 	public void setTransacted(boolean transacted) {

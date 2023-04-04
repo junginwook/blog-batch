@@ -1,5 +1,8 @@
 package blog.study.top.job.blog.spring_batch와_QuerydslItemReader;
 
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManagerFactory;
@@ -12,19 +15,19 @@ public class QuerydslPagingAdvancedItemReaderBuilder<T> {
 
 	private EntityManagerFactory entityManagerFactory;
 
-	private Map<String, Object> parameterValues;
-
 	private boolean transacted = true;
 
 	private String name;
 
 	private int currentItemCount;
 
-	private int maxItemCount;
+	private int maxItemCount = Integer.MAX_VALUE;
 
 	private boolean saveState;
 
-	protected Function<JPAQueryFactory, JPAQuery<T>> queryFunction;
+	private QuerydslPagingAdvancedItemReaderOption option;
+
+	private Function<JPAQueryFactory, JPAQuery<T>> queryFunction;
 
 
 	public QuerydslPagingAdvancedItemReaderBuilder<T> name(String name) {
@@ -57,12 +60,6 @@ public class QuerydslPagingAdvancedItemReaderBuilder<T> {
 		return this;
 	}
 
-	public QuerydslPagingAdvancedItemReaderBuilder<T> parameterValues(Map<String, Object> parameterValues) {
-		this.parameterValues = parameterValues;
-
-		return this;
-	}
-
 	public QuerydslPagingAdvancedItemReaderBuilder<T> entityManagerFactory(EntityManagerFactory entityManagerFactory) {
 		this.entityManagerFactory = entityManagerFactory;
 
@@ -81,18 +78,24 @@ public class QuerydslPagingAdvancedItemReaderBuilder<T> {
 		return this;
 	}
 
+	public QuerydslPagingAdvancedItemReaderBuilder<T> option(QuerydslPagingAdvancedItemReaderOption option) {
+		this.option = option;
+
+		return this;
+	}
+
 	public QuerydslPagingAdvancedItemReader<T> build() {
 
 		QuerydslPagingAdvancedItemReader<T> reader = new QuerydslPagingAdvancedItemReader<>();
 		reader.setName(name);
 		reader.setPageSize(pageSize);
-		reader.setParameterValues(parameterValues);
 		reader.setCurrentItemCount(currentItemCount);
 		reader.setMaxItemCount(maxItemCount);
 		reader.setSaveState(saveState);
 		reader.setTransacted(transacted);
 		reader.setEntityManagerFactory(entityManagerFactory);
 		reader.setQueryFunction(queryFunction);
+		reader.setOption(option);
 
 		return reader;
 	}
