@@ -27,4 +27,9 @@ public class ProductBackup {
 		this.name = name;
 		this.price = price;
 	}
+
+	public ProductBackup(Product product) {
+		this.name = product.getName();
+		this.price = product.getPrice();
+	}
 }

@@ -34,6 +34,8 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final NumberPath<Long> price = createNumber("price", Long.class);
 
+    public final EnumPath<ProductStatus> productStatus = createEnum("productStatus", ProductStatus.class);
+
     public final QPurchaseOrder purchaseOrder;
 
     public final QStore store;
