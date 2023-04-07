@@ -25,7 +25,7 @@ public class EntityContextConfiguration {
 	private final EntityManagerFactory entityManagerFactory;
 	private final PlatformTransactionManager transactionManager;
 	private final JobRepository jobRepository;
-	private static final int chunkSize = 100;
+	private static final int chunkSize = 10;
 
 	@Bean
 	public Job job230401_2() {

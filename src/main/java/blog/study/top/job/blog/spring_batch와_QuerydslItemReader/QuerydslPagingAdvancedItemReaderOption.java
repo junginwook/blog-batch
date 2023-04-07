@@ -7,10 +7,10 @@ import java.lang.reflect.Field;
 
 public class QuerydslPagingAdvancedItemReaderOption<T, N extends Number & Comparable<?>> {
 
-	NumberPath<N> numberPath;
-	QuerydslPagingAdvancedItemReaderExpression expression;
-	N currentId;
-	String fieldName;
+	private final NumberPath<N> numberPath;
+	private final  QuerydslPagingAdvancedItemReaderExpression expression;
+	private final  String fieldName;
+	private N currentId;
 
 	public QuerydslPagingAdvancedItemReaderOption(NumberPath<N> numberPath, QuerydslPagingAdvancedItemReaderExpression expression) {
 		String[] qField = numberPath.toString().split("\\.");
@@ -28,6 +28,10 @@ public class QuerydslPagingAdvancedItemReaderOption<T, N extends Number & Compar
 		return  expression.where(numberPath, currentId);
 	}
 
+	public void resetCurrentId(T item) {
+		currentId = (N) getFieldValue(item);
+	}
+
 	protected Object getFieldValue(T item) {
 		try {
 			Field field = item.getClass().getDeclaredField(fieldName);
@@ -36,9 +40,5 @@ public class QuerydslPagingAdvancedItemReaderOption<T, N extends Number & Compar
 		} catch (NoSuchFieldException | IllegalAccessException e) {
 			throw new IllegalArgumentException("Not Found or Not Access Field");
 		}
-	}
-
-	public void resetCurrentId(T item) {
-		currentId = (N) getFieldValue(item);
 	}
 }

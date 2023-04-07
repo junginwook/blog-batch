@@ -2,6 +2,8 @@ package blog.study.top.repository.product;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -45,6 +47,10 @@ public class Product {
 	@Column
 	private LocalDate createDate;
 
+	@Enumerated(EnumType.STRING)
+	@Column
+	private ProductStatus productStatus;
+
 	@Builder
 	public Product(String name, long price, LocalDate createDate) {
 		this.name = name;
@@ -52,6 +58,7 @@ public class Product {
 		this.createDate = createDate;
 	}
 
+	@Builder
 	public Product(String name, long price, long categoryNo, LocalDate createDate) {
 		this.name = name;
 		this.price = price;
@@ -63,5 +70,12 @@ public class Product {
 	public Product(String name, long price) {
 		this.name = name;
 		this.price = price;
+	}
+
+	@Builder
+	public Product(int price, LocalDate createDate, ProductStatus status) {
+		this.price = price;
+		this.createDate = createDate;
+		this.productStatus = status;
 	}
 }

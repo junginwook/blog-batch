@@ -1,12 +1,5 @@
 package blog.study.top.job.blog.spring_batch와_QuerydslItemReader;
 
-
-import blog.study.top.job.blog.spring_batch와_QuerydslItemReader.expression.OrderExpression;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.NumberPath;
-import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -27,9 +20,7 @@ public class QuerydslPagingAdvancedItemReader<T> extends AbstractPagingItemReade
 	private EntityManagerFactory entityManagerFactory;
 	private EntityManager entityManager;
 	private final Map<String, Object> jpaPropertyMap = new HashMap<>();
-	private JPAQuery<T> firstQuery;
-	private JPAQuery<T> remainingQuery;
-
+	private JPAQueryFactory queryFactory;
 	private boolean transacted = true;
 	private QuerydslPagingAdvancedItemReaderOption option;
 
@@ -40,11 +31,7 @@ public class QuerydslPagingAdvancedItemReader<T> extends AbstractPagingItemReade
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		super.afterPropertiesSet();
-		JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
-		firstQuery = queryFunction.apply(queryFactory)
-				.limit(getPageSize()).orderBy(option.orderExpression());
-		remainingQuery = queryFunction.apply(queryFactory)
-				.limit(getPageSize()).orderBy(option.orderExpression());
+		queryFactory = new JPAQueryFactory(entityManager);
 	}
 
 	@Override
@@ -79,15 +66,23 @@ public class QuerydslPagingAdvancedItemReader<T> extends AbstractPagingItemReade
 		List<T> items;
 
 		if (getPage() == 0) {
-			items = firstQuery.fetch();
+			items = queryFunction.apply(queryFactory)
+					.orderBy(option.orderExpression())
+					.limit(getPageSize()).fetch();
 		}
 		else {
-			items = remainingQuery.where(option.whereExpression()).fetch();
+			items = queryFunction.apply(queryFactory)
+					.where(option.whereExpression())
+					.orderBy(option.orderExpression())
+					.limit(getPageSize()).fetch();
 		}
 
-		option.resetCurrentId(items.get(items.size() - 1));
-		results.addAll(items);
-
+		if (items.size() > 0) {
+			option.resetCurrentId(items.get(items.size() - 1));
+			results.addAll(items);
+		} else {
+			results.clear();
+		}
 
 		tx.commit();
 	}
