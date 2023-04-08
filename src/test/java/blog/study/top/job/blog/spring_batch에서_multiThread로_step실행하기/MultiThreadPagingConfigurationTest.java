@@ -3,6 +3,7 @@ package blog.study.top.job.blog.spring_batch에서_multiThread로_step실행하�
 import static org.assertj.core.api.Assertions.assertThat;
 
 import blog.study.top.job.blog.TestBatchConfig;
+import blog.study.top.job.blog.spring_batch_itemReader에서_readerDB_사용하기.DataSourceConfiguration;
 import blog.study.top.repository.product.Product;
 import blog.study.top.repository.product.ProductBackup;
 import blog.study.top.repository.product.ProductStatus;
@@ -71,6 +72,5 @@ class MultiThreadPagingConfigurationTest {
 
 		assertThat(backups).hasSize(10);
 		assertThat(backups.get(0).getPrice()).isEqualTo(0L);
-		assertThat(backups.get(0).getPrice()).isEqualTo(9000L);
 	}
 }

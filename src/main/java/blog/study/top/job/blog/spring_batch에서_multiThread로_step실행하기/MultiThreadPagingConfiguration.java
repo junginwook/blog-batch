@@ -43,6 +43,7 @@ public class MultiThreadPagingConfiguration {
 	private final JobRepository jobRepository;
 	private final PlatformTransactionManager transactionManager;
 	private final EntityManagerFactory entityManagerFactory;
+	private final DataSource readerDataSource;
 	private final DataSource dataSource;
 	private static final int chunkSize = 1;
 	private int poolSize = 2;
@@ -85,7 +86,7 @@ public class MultiThreadPagingConfiguration {
 		params.put("createDate", createDate);
 
 		SqlPagingQueryProviderFactoryBean queryProvider = new SqlPagingQueryProviderFactoryBean();
-		queryProvider.setDataSource(dataSource);
+		queryProvider.setDataSource(readerDataSource);
 		queryProvider.setSelectClause("id, name, price, create_date");
 		queryProvider.setFromClause("from product");
 		queryProvider.setWhereClause("where create_date = :createDate");
@@ -104,7 +105,7 @@ public class MultiThreadPagingConfiguration {
 						);
 					}
 				})
-				.dataSource(dataSource)
+				.dataSource(readerDataSource)
 				.queryProvider(queryProvider.getObject())
 				.parameterValues(params)
 				.saveState(false)
