@@ -16,25 +16,25 @@ public class DataSourceConfiguration {
 	public static final String MASTER_DATASOURCE = "dataSource";
 	public static final String READER_DATASOURCE = "readerDataSource";
 
-	@Bean(MASTER_DATASOURCE)
-	@Primary
-	@ConfigurationProperties(PROPERTIES)
-	public DataSource dataSource() {
-		HikariDataSource hikariDataSource = DataSourceBuilder.create()
-				.type(HikariDataSource.class)
-				.build();
-		return hikariDataSource;
-	}
-
-	@Bean(READER_DATASOURCE)
-	@ConfigurationProperties(PROPERTIES)
-	public DataSource readerDataSource() {
-		HikariDataSource hikariDataSource =
-				DataSourceBuilder
-						.create()
-				.type(HikariDataSource.class)
-				.build();
-		hikariDataSource.setReadOnly(true);
-		return hikariDataSource;
-	}
+//	@Bean(MASTER_DATASOURCE)
+//	@Primary
+//	@ConfigurationProperties(PROPERTIES)
+//	public DataSource dataSource() {
+//		HikariDataSource hikariDataSource = DataSourceBuilder.create()
+//				.type(HikariDataSource.class)
+//				.build();
+//		return hikariDataSource;
+//	}
+//
+//	@Bean(READER_DATASOURCE)
+//	@ConfigurationProperties(PROPERTIES)
+//	public DataSource readerDataSource() {
+//		HikariDataSource hikariDataSource =
+//				DataSourceBuilder
+//						.create()
+//				.type(HikariDataSource.class)
+//				.build();
+//		hikariDataSource.setReadOnly(true);
+//		return hikariDataSource;
+//	}
 }

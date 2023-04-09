@@ -34,6 +34,10 @@ public class Store {
 		this.address = address;
 	}
 
+	public Store(String name) {
+		this.name = name;
+	}
+
 	public void addProduct(Product product) {
 		products.add(product);
 	}

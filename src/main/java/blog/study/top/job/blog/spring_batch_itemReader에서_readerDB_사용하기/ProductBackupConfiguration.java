@@ -28,8 +28,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class ProductBackupConfiguration {
 	private final JobRepository jobRepository;
 	private final EntityManagerFactory entityManagerFactory;
-	@Qualifier("readerEntityManagerFactory")
-	private final EntityManagerFactory readerEntityManagerFactory;
+//	@Qualifier("readerEntityManagerFactory")
+//	private final EntityManagerFactory readerEntityManagerFactory;
 	private final PlatformTransactionManager transactionManager;
 	private final int chunkSize = 10;
 
@@ -57,7 +57,7 @@ public class ProductBackupConfiguration {
 		String query = String.format("SELECT p FROM Product p WHERE p.createDate = '%s'", txDate);
 
 		return new JpaPagingItemReaderBuilder<Product>()
-				.entityManagerFactory(readerEntityManagerFactory)
+				.entityManagerFactory(entityManagerFactory)
 				.queryString(query)
 				.pageSize(chunkSize)
 				.name("reader_230408")

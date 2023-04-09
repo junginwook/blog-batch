@@ -41,41 +41,41 @@ public class BatchJpaConfiguration {
 	private final ObjectProvider<Collection<DataSourcePoolMetadataProvider>> metadataProviders;
 	private final EntityManagerFactoryBuilder entityManagerFactoryBuilder;
 
-	@Primary
-	@Bean(name = MASTER_ENTITY_MANAGER_FACTORY)
-	public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-			DataSource dataSource
-	) {
-		return EntityManagerFactoryCreator.builder()
-				.properties(jpaProperties)
-				.hibernateProperties(hibernateProperties)
-				.metadataProvider(metadataProviders)
-				.entityManagerFactoryBuilder(entityManagerFactoryBuilder)
-				.dataSource(dataSource)
-				.packages(PACKAGE)
-				.persistenceUnit("master")
-				.build().create();
-	}
-
-	@Bean(name = READER_ENTITY_MANAGER_FACTORY)
-	public LocalContainerEntityManagerFactoryBean readerEntityManagerFactory(
-		@Qualifier(READER_DATASOURCE) DataSource dataSource
-	) {
-
-		return EntityManagerFactoryCreator.builder()
-				.properties(jpaProperties)
-				.hibernateProperties(hibernateProperties)
-				.metadataProvider(metadataProviders)
-				.entityManagerFactoryBuilder(entityManagerFactoryBuilder)
-				.dataSource(dataSource)
-				.packages(PACKAGE)
-				.persistenceUnit("reader")
-				.build().create();
-	}
-
-	@Primary
-	@Bean(name = MASTER_TX_MANAGER)
-	public PlatformTransactionManager batchTransactionManager(LocalContainerEntityManagerFactoryBean entityManagerFactory) {
-		return new JpaTransactionManager(Objects.requireNonNull(entityManagerFactory.getObject()));
-	}
+//	@Primary
+//	@Bean(name = MASTER_ENTITY_MANAGER_FACTORY)
+//	public LocalContainerEntityManagerFactoryBean entityManagerFactory(
+//			DataSource dataSource
+//	) {
+//		return EntityManagerFactoryCreator.builder()
+//				.properties(jpaProperties)
+//				.hibernateProperties(hibernateProperties)
+//				.metadataProvider(metadataProviders)
+//				.entityManagerFactoryBuilder(entityManagerFactoryBuilder)
+//				.dataSource(dataSource)
+//				.packages(PACKAGE)
+//				.persistenceUnit("master")
+//				.build().create();
+//	}
+//
+//	@Bean(name = READER_ENTITY_MANAGER_FACTORY)
+//	public LocalContainerEntityManagerFactoryBean readerEntityManagerFactory(
+//		@Qualifier(READER_DATASOURCE) DataSource dataSource
+//	) {
+//
+//		return EntityManagerFactoryCreator.builder()
+//				.properties(jpaProperties)
+//				.hibernateProperties(hibernateProperties)
+//				.metadataProvider(metadataProviders)
+//				.entityManagerFactoryBuilder(entityManagerFactoryBuilder)
+//				.dataSource(dataSource)
+//				.packages(PACKAGE)
+//				.persistenceUnit("reader")
+//				.build().create();
+//	}
+//
+//	@Primary
+//	@Bean(name = MASTER_TX_MANAGER)
+//	public PlatformTransactionManager batchTransactionManager(LocalContainerEntityManagerFactoryBean entityManagerFactory) {
+//		return new JpaTransactionManager(Objects.requireNonNull(entityManagerFactory.getObject()));
+//	}
 }

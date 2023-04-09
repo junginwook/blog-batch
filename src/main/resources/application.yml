@@ -10,6 +10,7 @@ spring:
       password: passlocal123
       driver-class-name: com.mysql.cj.jdbc.Driver
       maximum-pool-size: 20
+      max-lifetime: 58
 
   batch: #TODO
     jdbc:
