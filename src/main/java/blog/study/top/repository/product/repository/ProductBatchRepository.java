@@ -26,4 +26,28 @@ public class ProductBatchRepository extends QuerydslRepositorySupport {
 				.offset(offSet)
 				.fetch();
 	}
+
+	public Long findMinId(LocalDate startDate, LocalDate endDate) {
+		return queryFactory
+				.select(product.id)
+				.from(product)
+				.where(
+						product.createDate.between(startDate, endDate)
+				)
+				.orderBy(product.id.asc())
+				.limit(1)
+				.fetchOne();
+	}
+
+	public Long findMaxId(LocalDate startDate, LocalDate endDate) {
+		return queryFactory
+				.select(product.id)
+				.from(product)
+				.where(
+						product.createDate.between(startDate, endDate)
+				)
+				.orderBy(product.id.desc())
+				.limit(1)
+				.fetchOne();
+	}
 }

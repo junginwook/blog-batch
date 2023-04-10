@@ -3,7 +3,7 @@ package blog.study.top.job.blog.spring_batch_파티셔닝_활용하기;
 import blog.study.top.repository.product.Product;
 import blog.study.top.repository.product.ProductBackup;
 import blog.study.top.repository.product.repository.ProductBackupRepository;
-import blog.study.top.repository.product.repository.ProductRepository;
+import blog.study.top.repository.product.repository.ProductBatchRepository;
 import jakarta.persistence.EntityManagerFactory;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -36,7 +36,7 @@ public class PartitionJobConfiguration {
 
 	private final ProductBackupRepository productBackupRepository;
 
-	private final ProductRepository productRepository;
+	private final ProductBatchRepository productBatchRepository;
 
 	private final JobRepository jobRepository;
 	private final EntityManagerFactory entityManagerFactory;
@@ -47,7 +47,7 @@ public class PartitionJobConfiguration {
 	@Bean
 	public TaskExecutorPartitionHandler partitionHandler() {
 		TaskExecutorPartitionHandler partitionHandler = new TaskExecutorPartitionHandler();
-		partitionHandler.setStep(step1());
+		partitionHandler.setStep(step_230410());
 		partitionHandler.setTaskExecutor(executor_230410());
 		partitionHandler.setGridSize(poolSize);
 		return partitionHandler;
@@ -64,6 +64,7 @@ public class PartitionJobConfiguration {
 		return executor;
 	}
 
+	@Bean
 	public Job job_230410() {
 		return new JobBuilder("job_230410", jobRepository)
 				.start(stepManager())
@@ -73,15 +74,15 @@ public class PartitionJobConfiguration {
 	@Bean
 	public Step stepManager() {
 		return new StepBuilder("stepManager", jobRepository)
-				.partitioner("step1", partitioner(null, null))
-				.step(step1())
+				.partitioner("step_230410", partitioner(null, null))
+				.step(step_230410())
 				.partitionHandler(partitionHandler())
 				.build();
 	}
 
 	@Bean
-	public Step step1() {
-		return new StepBuilder("step1", jobRepository)
+	public Step step_230410() {
+		return new StepBuilder("step_230410", jobRepository)
 				.<Product, ProductBackup>chunk(chunkSize, transactionManager)
 				.reader(reader_230410(null, null))
 				.processor(processor())
@@ -98,7 +99,7 @@ public class PartitionJobConfiguration {
 		LocalDate startLocalDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		LocalDate endLocalDate = LocalDate.parse(endDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-		return new ProductIdRangePartitioner(productRepository, startLocalDate, endLocalDate);
+		return new ProductIdRangePartitioner(productBatchRepository, startLocalDate, endLocalDate);
 	}
 
 	@Bean
