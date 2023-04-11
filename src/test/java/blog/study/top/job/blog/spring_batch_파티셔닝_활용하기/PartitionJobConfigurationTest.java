@@ -38,6 +38,7 @@ class PartitionJobConfigurationTest {
 	@Autowired
 	private ProductRepository productRepository;
 
+
 	@Autowired
 	private ProductBackupRepository productBackupRepository;
 
