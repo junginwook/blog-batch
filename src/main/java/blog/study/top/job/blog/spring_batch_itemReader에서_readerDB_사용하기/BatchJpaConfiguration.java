@@ -25,11 +25,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 @RequiredArgsConstructor
 @Configuration
 @EnableConfigurationProperties({JpaProperties.class, HibernateProperties.class})
-@EnableJpaRepositories(
-		basePackages = PACKAGE,
-		entityManagerFactoryRef = MASTER_ENTITY_MANAGER_FACTORY,
-		transactionManagerRef = MASTER_TX_MANAGER
-)
+//@EnableJpaRepositories(
+//		basePackages = PACKAGE,
+//		entityManagerFactoryRef = MASTER_ENTITY_MANAGER_FACTORY,
+//		transactionManagerRef = MASTER_TX_MANAGER
+//)
 public class BatchJpaConfiguration {
 	public static final String PACKAGE = "blog.study.top.repository";
 	public static final String MASTER_ENTITY_MANAGER_FACTORY = "entityManagerFactory";

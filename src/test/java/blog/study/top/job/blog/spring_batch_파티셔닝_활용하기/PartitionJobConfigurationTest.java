@@ -8,6 +8,7 @@ import blog.study.top.repository.product.Product;
 import blog.study.top.repository.product.ProductBackup;
 import blog.study.top.repository.product.ProductStatus;
 import blog.study.top.repository.product.repository.ProductBackupRepository;
+import blog.study.top.repository.product.repository.ProductBatchRepository;
 import blog.study.top.repository.product.repository.ProductRepository;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -28,6 +29,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 @SpringBatchTest
 @SpringBootTest(classes = {
+		ProductBatchRepository.class,
 		TestBatchConfig.class,
 		PartitionJobConfiguration.class
 })
@@ -35,6 +37,7 @@ class PartitionJobConfigurationTest {
 
 	@Autowired
 	private ProductRepository productRepository;
+
 
 	@Autowired
 	private ProductBackupRepository productBackupRepository;
