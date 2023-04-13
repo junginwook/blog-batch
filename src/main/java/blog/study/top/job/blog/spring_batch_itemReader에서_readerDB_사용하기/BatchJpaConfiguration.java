@@ -40,7 +40,7 @@ public class BatchJpaConfiguration {
 	private final HibernateProperties hibernateProperties;
 	private final ObjectProvider<Collection<DataSourcePoolMetadataProvider>> metadataProviders;
 	private final EntityManagerFactoryBuilder entityManagerFactoryBuilder;
-
+//
 //	@Primary
 //	@Bean(name = MASTER_ENTITY_MANAGER_FACTORY)
 //	public LocalContainerEntityManagerFactoryBean entityManagerFactory(
