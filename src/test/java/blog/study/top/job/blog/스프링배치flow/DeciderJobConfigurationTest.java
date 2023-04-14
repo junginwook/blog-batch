@@ -19,13 +19,6 @@ class DeciderJobConfigurationTest {
 	@Autowired
 	private JobLauncherTestUtils jobLauncherTestUtils;
 
-	private JdbcTemplate jdbcTemplate;
-
-	@Autowired
-	public void setDataSource(DataSource dataSource) {
-		this.jdbcTemplate = new JdbcTemplate(dataSource);
-	}
-
 	@Test
 	void testJob() throws Exception {
 		JobExecution jobExecution = jobLauncherTestUtils.launchJob();
