@@ -95,7 +95,7 @@ public class BatchJdbcTestConfiguration {
 	public JdbcBatchItemWriter<PayEntity> batchJdbcUnitTestJobWriter() {
 		return new JdbcBatchItemWriterBuilder<PayEntity>()
 				.dataSource(dataSource)
-				.sql("insert into pay(amount, tx_name, tx_date_time) values (:amount, :txName, :txDateTime)")
+				.sql("insert into pay(amount, tx_name, tx_date_time, success_status) values (:amount, :txName, :txDateTime, true)")
 				.beanMapped()
 				.build();
 	}

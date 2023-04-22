@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,10 +33,11 @@ public class PassEntity extends BaseEntity {
 	private String userId;
 
 	@Enumerated(EnumType.STRING)
-	private PassStatus status;
+	private PassStatus passStatus;
 
 	private Integer remainingCount;
 
+	private LocalDateTime createdAt;
 	private LocalDateTime startedAt;
 
 	private LocalDateTime endedAt;
@@ -43,12 +45,13 @@ public class PassEntity extends BaseEntity {
 	private LocalDateTime expiredAt;
 
 	@Builder
-	public PassEntity(Integer packageSeq, String userId, PassStatus status, Integer remainingCount, LocalDateTime startedAt,
+	public PassEntity(Integer packageSeq, String userId, PassStatus passStatus, Integer remainingCount, LocalDateTime createdAt, LocalDateTime startedAt,
 			LocalDateTime endedAt, LocalDateTime expiredAt) {
 		this.packageSeq = packageSeq;
 		this.userId = userId;
-		this.status = status;
+		this.passStatus = passStatus;
 		this.remainingCount = remainingCount;
+		this.createdAt = createdAt;
 		this.startedAt = startedAt;
 		this.endedAt = endedAt;
 		this.expiredAt = expiredAt;
@@ -59,7 +62,7 @@ public class PassEntity extends BaseEntity {
 		return PassEntity.builder()
 				.packageSeq(bulkPassEntity.getPackageSeq())
 				.userId(userId)
-				.status(PassStatus.PROGRESSED)
+				.passStatus(PassStatus.PROGRESSED)
 				.remainingCount(bulkPassEntity.getCount())
 				.startedAt(LocalDateTime.now())
 				.endedAt(LocalDateTime.now())

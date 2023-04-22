@@ -21,8 +21,7 @@ public class QPassEntity extends EntityPathBase<PassEntity> {
 
     public final blog.study.top.repository.QBaseEntity _super = new blog.study.top.repository.QBaseEntity(this);
 
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
+    public final DateTimePath<java.time.LocalDateTime> createdAt = createDateTime("createdAt", java.time.LocalDateTime.class);
 
     public final DateTimePath<java.time.LocalDateTime> endedAt = createDateTime("endedAt", java.time.LocalDateTime.class);
 
@@ -35,11 +34,11 @@ public class QPassEntity extends EntityPathBase<PassEntity> {
 
     public final NumberPath<Integer> passSeq = createNumber("passSeq", Integer.class);
 
+    public final EnumPath<PassStatus> passStatus = createEnum("passStatus", PassStatus.class);
+
     public final NumberPath<Integer> remainingCount = createNumber("remainingCount", Integer.class);
 
     public final DateTimePath<java.time.LocalDateTime> startedAt = createDateTime("startedAt", java.time.LocalDateTime.class);
-
-    public final EnumPath<PassStatus> status = createEnum("status", PassStatus.class);
 
     public final StringPath userId = createString("userId");
 
