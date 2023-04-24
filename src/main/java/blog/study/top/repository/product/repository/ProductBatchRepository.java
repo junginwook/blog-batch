@@ -8,7 +8,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class ProductBatchRepository extends QuerydslRepositorySupport {
 
 	private final JPAQueryFactory queryFactory;

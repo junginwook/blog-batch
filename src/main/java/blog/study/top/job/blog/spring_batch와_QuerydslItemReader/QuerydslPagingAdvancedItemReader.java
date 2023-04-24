@@ -31,7 +31,6 @@ public class QuerydslPagingAdvancedItemReader<T> extends AbstractPagingItemReade
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		super.afterPropertiesSet();
-		queryFactory = new JPAQueryFactory(entityManager);
 	}
 
 	@Override
@@ -39,6 +38,7 @@ public class QuerydslPagingAdvancedItemReader<T> extends AbstractPagingItemReade
 		super.doOpen();
 
 		entityManager = entityManagerFactory.createEntityManager(jpaPropertyMap);
+		queryFactory = new JPAQueryFactory(entityManager);
 		if (entityManager == null) {
 			throw new DataAccessResourceFailureException("Unable to obtain an EntityManager");
 		}

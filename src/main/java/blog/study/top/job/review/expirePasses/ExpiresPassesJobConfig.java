@@ -3,6 +3,7 @@ package blog.study.top.job.review.expirePasses;
 import blog.study.top.repository.pass.PassEntity;
 import blog.study.top.repository.pass.PassStatus;
 import jakarta.persistence.EntityManagerFactory;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +59,7 @@ public class ExpiresPassesJobConfig {
 	@Bean
 	public ItemProcessor<PassEntity, PassEntity> expirePassItemProcessor() {
 		return passEntity -> {
-			passEntity.setStatus(PassStatus.EXPIRED);
+			passEntity.setPassStatus(PassStatus.EXPIRED);
 			passEntity.setExpiredAt(LocalDateTime.now());
 			return passEntity;
 		};
