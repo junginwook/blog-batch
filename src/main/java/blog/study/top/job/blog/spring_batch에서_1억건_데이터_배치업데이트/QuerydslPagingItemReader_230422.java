@@ -24,7 +24,9 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
+import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
+import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,7 +39,6 @@ public class QuerydslPagingItemReader_230422 {
 	private final EntityManagerFactory entityManagerFactory;
 	private final PlatformTransactionManager transactionManager;
 	private final JobRepository jobRepository;
-
 	private final DataSource dataSource;
 	private final static int chunkSize = 2000;
 
@@ -70,7 +71,7 @@ public class QuerydslPagingItemReader_230422 {
 						queryFactory.selectFrom(passEntity)
 								.where(
 										passEntity.createdAt.eq(createdAt.atTime(0, 0, 0)),
-										passEntity.passStatus.eq(PassStatus.EXPIRED)
+										passEntity.passStatus.eq(PassStatus.PROGRESSED)
 								)
 				)
 				.option(new QuerydslPagingAdvancedItemReaderOption(passEntity.passSeq, QuerydslPagingAdvancedItemReaderExpression.ASC))
@@ -81,7 +82,7 @@ public class QuerydslPagingItemReader_230422 {
 
 		return item -> {
 			Map<String, Object> map = new HashMap();
-			map.put("passStatus", PassStatus.PROGRESSED.name());
+			map.put("passStatus", PassStatus.EXPIRED.name());
 			map.put("passSeq", item.getPassSeq());
 			return map;
 		};
