@@ -32,6 +32,10 @@ public class QuerydslPagingAdvancedItemReaderOption<T, N extends Number & Compar
 		currentId = (N) getFieldValue(item);
 	}
 
+	public void resetCurrentIdByInt(Integer index) {
+		currentId = (N) index;
+	}
+
 	protected Object getFieldValue(T item) {
 		try {
 			Field field = item.getClass().getDeclaredField(fieldName);

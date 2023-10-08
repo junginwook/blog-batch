@@ -66,12 +66,12 @@ public class QuerydslPagingItemReader_230422 {
 	) {
 		return new QuerydslPagingAdvancedItemReaderBuilder<PassEntity>()
 				.pageSize(chunkSize)
+				.name("QuerydslPagingAdvancedItemReader")
 				.entityManagerFactory(entityManagerFactory)
 				.queryFunction(queryFactory ->
 						queryFactory.selectFrom(passEntity)
 								.where(
-										passEntity.createdAt.eq(createdAt.atTime(0, 0, 0)),
-										passEntity.passStatus.eq(PassStatus.PROGRESSED)
+										passEntity.passStatus.eq(PassStatus.EXPIRED)
 								)
 				)
 				.option(new QuerydslPagingAdvancedItemReaderOption(passEntity.passSeq, QuerydslPagingAdvancedItemReaderExpression.ASC))
