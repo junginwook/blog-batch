@@ -23,7 +23,7 @@ public class QuerydslPagingAdvancedItemReaderBuilder<T> {
 
 	private int maxItemCount = Integer.MAX_VALUE;
 
-	private boolean saveState;
+	private boolean saveState = true;
 
 	private QuerydslPagingAdvancedItemReaderOption option;
 

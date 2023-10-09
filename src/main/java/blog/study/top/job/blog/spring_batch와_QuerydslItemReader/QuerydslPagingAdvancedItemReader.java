@@ -93,6 +93,12 @@ public class QuerydslPagingAdvancedItemReader<T> extends AbstractPagingItemReade
 		super.doClose();
 	}
 
+	@Override
+	protected void jumpToItem(int itemIndex) throws Exception {
+		option.resetCurrentIdByInt(itemIndex);
+		super.jumpToItem(itemIndex);
+	}
+
 	public void setQueryFunction(Function<JPAQueryFactory, JPAQuery<T>> queryFunction) {
 		this.queryFunction = queryFunction;
 	}

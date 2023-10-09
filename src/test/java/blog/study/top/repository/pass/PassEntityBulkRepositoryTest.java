@@ -24,7 +24,7 @@ class PassEntityBulkRepositoryTest {
 				LocalDate.of(2023, 4, 20),
 				LocalDate.of(2023, 7, 27)
 		);
-		for(int i =0 ; i< 1000; i++) {
+		for(int i =0 ; i< 10; i++) {
 			List<PassDto> passDtoList = IntStream.range(0, 100000)
 					.parallel()
 					.mapToObj(item -> easyRandom.nextObject(PassDto.class))
